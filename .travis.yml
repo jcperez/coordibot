@@ -10,9 +10,9 @@ cache:
   directories:
     - node_modules
 
-script:
-    - npm install
-    - npm install typescript -g
-    - tsc
-    - npm prune
-    - npm install -g serverless
+deploy:
+    - provider: script
+      script: bash scripts/deploy.sh
+      on:
+        all_branches: true
+
