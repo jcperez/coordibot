@@ -6,10 +6,6 @@ node_js:
 install:
   - npm install
 
-cache:
-  directories:
-    - node_modules
-
 deploy:
     - provider: script
       script: bash scripts/deploy.sh
