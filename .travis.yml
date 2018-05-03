@@ -6,13 +6,9 @@ node_js:
 install:
   - npm install
 
-cache:
-  directories:
-    - node_modules
+deploy:
+    - provider: script
+      script: chmod +x ./scripts/deploy.sh && ./scripts/deploy.sh
+      on:
+        all_branches: true
 
-script:
-    - npm install
-    - npm install typescript -g
-    - tsc
-    - npm prune
-    - npm install -g serverless
