@@ -5,3 +5,13 @@ node_js:
 
 install:
   - npm install
+
+cache:
+  directories:
+    - node_modules
+
+script:
+    - npm install typescript -g
+    - tsc
+    - npm prune
+    - npm install -g serverless
