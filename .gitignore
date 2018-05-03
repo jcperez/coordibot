@@ -1,0 +1,10 @@
+# package directories
+node_modules
+jspm_packages
+Lambda.zip
+
+config/local.json
+
+# Serverless directories
+.serverless
+dist
