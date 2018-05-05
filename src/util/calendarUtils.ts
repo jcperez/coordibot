@@ -18,8 +18,12 @@ const detectEventConflict = (event:UserEvent, events: Array<UserEvent>): Array<U
   });
 }
 
-const nextDay = (date: string): string => {
+const today = (): string => {
+  return moment().format(DATE_FORMAT);
+}
+
+const nextDay = (date?: string): string => {
   return moment(date).add(1, 'day').format(DATE_FORMAT);
 };
 
-export { detectEventConflict, nextDay };
+export { detectEventConflict, today, nextDay };

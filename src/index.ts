@@ -6,12 +6,29 @@ import { Context, Callback } from 'aws-lambda';
 
 import { interviewers } from './interviewers';
 import { eventMatching, sortStrings } from './util/utils';
-import { detectEventConflict, nextDay } from './util/calendarUtils';
+import { detectEventConflict, today, nextDay } from './util/calendarUtils';
 import { isDurationAllowed } from './validations';
 import { DATE_FORMAT, WEEK_DATE_FORMAT } from './constants';
 import { availableCalendars, retrieveUserEvents, UserEvent } from './adapters/gcalendar';
+import { genericLexHandler, sendMessageToClient } from './lex';
 
 const keywords: Array<string> = config.get('EVENT_NAME');
+
+const formatTestResponse = (calendars: Array<any>): string => {
+  const calendarIds = calendars.map(calendar => calendar.id);
+  let answer = '';
+  for (let calendar of calendarIds) {
+    if (interviewers.indexOf(calendar) != -1) {
+      answer += `${calendar} - OK\n`;
+    }
+  }
+  for (let interviewer of interviewers) {
+    if (calendarIds.indexOf(interviewer) == -1) {
+      answer += `${interviewer} - Waiting for access to calendar\n`
+    }
+  }
+  return answer;
+};
 
 const interviewersAvailability = async (startDate : string, endDate?: string) => {
   const payload = {
@@ -31,7 +48,7 @@ const interviewersAvailability = async (startDate : string, endDate?: string) =>
       return retrieveUserEvents(interviewer, payload)
         .catch(err => []);
     }
-    console.log(`Skipping ${interviewer}. Service doesn't have access to his/her calendar.`);
+    console.log(`Skipping ${interviewer}. Service doesn't have access to this calendar.`);
     return Promise.resolve([]);
   }));
 
@@ -84,25 +101,11 @@ const interviewersAvailability = async (startDate : string, endDate?: string) =>
   return availability;
 };
 
-// Close dialog with the customer, reporting fulfillmentState of Failed or Fulfilled
-function close(sessionAttributes: any, fulfillmentState: any, message: any) {
-  return {
-      sessionAttributes,
-      dialogAction: {
-          type: 'Close',
-          fulfillmentState,
-          message,
-      },
-  };
-}
-
-// --------------- Events -----------------------
+// --------------- Dispatchers -----------------------
 async function dispatchAvailability(intentRequest: any, callback: any) {
   const sessionAttributes = intentRequest.sessionAttributes;
   const slots = intentRequest.currentIntent.slots;
   const interviewDate = slots.interviewDate;
-
-  console.log(`request received for userId=${intentRequest.userId}, intentName=${intentRequest.currentIntent.name}`);
 
   const availability = await interviewersAvailability(interviewDate);
 
@@ -121,23 +124,12 @@ async function dispatchAvailability(intentRequest: any, callback: any) {
     answer = `There is no available slots on ${interviewDate}.`;
   }
 
-  callback(
-    close(
-      sessionAttributes,
-      'Fulfilled',
-      {
-        'contentType': 'PlainText',
-        'content': answer
-      }
-    )
-  );
+  callback(sendMessageToClient(answer, sessionAttributes));
 }
 
 async function dispatchStats(intentRequest: any, callback: any) {
   const sessionAttributes = intentRequest.sessionAttributes;
   const slots = intentRequest.currentIntent.slots;
-
-  console.log(`request received for userId=${intentRequest.userId}, intentName=${intentRequest.currentIntent.name}`);
 
   const date = slots.reference;
 
@@ -169,87 +161,34 @@ async function dispatchStats(intentRequest: any, callback: any) {
     answer += `${messages.sort().join('\n')}\n---------------------\nYou have ${Number(minutes/60).toFixed(2)} hours available between ${startWeek.format('MMM D')} and ${endWeek.add(-1, 'days').format('MMM D')}.`;
   }
 
-  callback(
-    close(
-      sessionAttributes,
-      'Fulfilled',
-      {
-        'contentType': 'PlainText',
-        'content': answer
-      }
-    )
-  );
+  callback(sendMessageToClient(answer, sessionAttributes));
 }
-
-const formatTestResponse = (calendars: Array<any>): string => {
-  const calendarIds = calendars.map(calendar => calendar.id);
-  let answer = '';
-  for (let calendar of calendarIds) {
-    if (interviewers.indexOf(calendar) != -1) {
-      answer += `${calendar} - OK\n`;
-    }
-  }
-  for (let interviewer of interviewers) {
-    if (calendarIds.indexOf(interviewer) == -1) {
-      answer += `${interviewer} - Waiting for access to calendar\n`
-    }
-  }
-  return answer;
-};
 
 async function dispatchTest(event: any, callback: any) {
   const sessionAttributes = event.sessionAttributes;
 
-  console.log(`request received for userId=${event.userId}, intentName=${event.currentIntent.name}`);
-
   const payload = {
-    startDate: moment().format(DATE_FORMAT),
-    endDate: moment().add(1, 'day').format(DATE_FORMAT),
+    startDate: today(),
+    endDate: nextDay(),
   }
 
   const calendars = await availableCalendars(payload);
   const answer = formatTestResponse(calendars);
 
-  callback(
-    close(
-      sessionAttributes,
-      'Fulfilled',
-      {
-        'contentType': 'PlainText',
-        'content': answer
-      }
-    )
-  );
+  callback(sendMessageToClient(answer, sessionAttributes));
 }
 
+// --------------- Handlers -----------------------
 const retrieveAvailabilityHandler = (event: any, context: Context, callback: Callback) => {
-  try {
-    dispatchAvailability(event, (response: any) => {
-      callback(null, response);
-    });
-  } catch (err) {
-    callback(err);
-  }
+  genericLexHandler(event, context, callback, dispatchAvailability);
 };
 
-const testRetrieveAvailabilityHandler = (event: any, context: Context, callback: Callback) => {
-  try {
-    dispatchTest(event, (response: any) => {
-      callback(null, response);
-    });
-  } catch (err) {
-    callback(err);
-  }
+const testRetrieveAvailabilityHandler = (event: any, context: Context, callback: Callback): void => {
+  genericLexHandler(event, context, callback, dispatchTest);
 };
 
-const retrieveStatistics = (event: any, context: Context, callback: Callback) => {
-  try {
-    dispatchStats(event, (response: any) => {
-      callback(null, response);
-    });
-  } catch (err) {
-    callback(err);
-  }
+const retrieveStatistics = (event: any, context: Context, callback: Callback): void => {
+  genericLexHandler(event, context, callback, dispatchStats);
 };
 
 export { retrieveAvailabilityHandler, testRetrieveAvailabilityHandler, retrieveStatistics }
