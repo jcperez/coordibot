@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 
 import { UserEvent } from '../adapters/gcalendar';
+import { DATE_FORMAT } from '../constants';
 
 const detectEventConflict = (event:UserEvent, events: Array<UserEvent>): Array<UserEvent> => {
   const start = moment(event.start);
@@ -17,4 +18,8 @@ const detectEventConflict = (event:UserEvent, events: Array<UserEvent>): Array<U
   });
 }
 
-export { detectEventConflict };
+const nextDay = (date: string): string => {
+  return moment(date).add(1, 'day').format(DATE_FORMAT);
+};
+
+export { detectEventConflict, nextDay };

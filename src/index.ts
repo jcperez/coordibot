@@ -1,33 +1,25 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import * as config from 'config';
 
 import { Context, Callback } from 'aws-lambda';
 
 import { interviewers } from './interviewers';
 import { eventMatching, sortStrings } from './util/utils';
-import { detectEventConflict } from './util/calendarUtils';
+import { detectEventConflict, nextDay } from './util/calendarUtils';
+import { isDurationAllowed } from './validations';
 import { DATE_FORMAT, WEEK_DATE_FORMAT } from './constants';
 import { availableCalendars, retrieveUserEvents, UserEvent } from './adapters/gcalendar';
 
-const keywords = [
-  'Hold for interview'
-];
-
-const isDurationAllowed = (event: UserEvent, minimumDuration: Number = 90): boolean => {
-  const start = moment(event.start);
-  const end = moment(event.end);
-
-  const duration = moment.duration(end.diff(start));
-  return duration.asMinutes() >= minimumDuration;
-};
+const keywords: Array<string> = config.get('EVENT_NAME');
 
 const interviewersAvailability = async (startDate : string, endDate?: string) => {
   const payload = {
     startDate: startDate,
-    endDate: endDate || moment(startDate).add(1, 'day').format(DATE_FORMAT)
+    endDate: endDate || nextDay(startDate)
   }
 
-  console.log(`Retrieving availability for ${payload.startDate} to ${payload.endDate}`);
+  console.log(`Retrieving availability: ${payload.startDate} to ${payload.endDate}`);
 
   const calendars = await availableCalendars(payload);
   const calendarIds: Array<string> = calendars.map((calendar: any) => calendar.id);
