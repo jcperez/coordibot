@@ -6,6 +6,7 @@ import { Context, Callback } from 'aws-lambda';
 import { interviewers } from './interviewers';
 import { eventMatching, sortStrings } from './util/utils';
 import { detectEventConflict } from './util/calendarUtils';
+import { DATE_FORMAT, WEEK_DATE_FORMAT } from './constants';
 import { availableCalendars, retrieveUserEvents, UserEvent } from './adapters/gcalendar';
 
 const keywords = [
@@ -23,7 +24,7 @@ const isDurationAllowed = (event: UserEvent, minimumDuration: Number = 90): bool
 const interviewersAvailability = async (startDate : string, endDate?: string) => {
   const payload = {
     startDate: startDate,
-    endDate: endDate || moment(startDate).add(1, 'day').format('YYYY-MM-DD')
+    endDate: endDate || moment(startDate).add(1, 'day').format(DATE_FORMAT)
   }
 
   console.log(`Retrieving availability for ${payload.startDate} to ${payload.endDate}`);
@@ -51,7 +52,7 @@ const interviewersAvailability = async (startDate : string, endDate?: string) =>
     for (let slot of slots) {
       const date = moment(slot.start);
       const end = moment(slot.end);
-      const day = date.format('YYYY-MM-DD');
+      const day = date.format(DATE_FORMAT);
 
       if (!availability[day]) {
         availability[day] = [];
@@ -149,8 +150,7 @@ async function dispatchStats(intentRequest: any, callback: any) {
   const date = slots.reference;
 
   // Validate string to be a ISO 8601 week date
-
-  const week = moment(date, "YYYY-[W]WW", true);
+  const week = moment(date, WEEK_DATE_FORMAT, true);
   let answer = '';
 
   if (!week.isValid()) {
@@ -159,7 +159,7 @@ async function dispatchStats(intentRequest: any, callback: any) {
     const startWeek = moment(date);
     const endWeek = moment(date).add(5, 'days');
 
-    const availability = await interviewersAvailability(startWeek.format('YYYY-MM-DD'), endWeek.format('YYYY-MM-DD'));
+    const availability = await interviewersAvailability(startWeek.format(DATE_FORMAT), endWeek.format(DATE_FORMAT));
 
     const keys = _.keys(availability);
     let minutes = 0;
@@ -193,9 +193,7 @@ const formatTestResponse = (calendars: Array<any>): string => {
   const calendarIds = calendars.map(calendar => calendar.id);
   let answer = '';
   for (let calendar of calendarIds) {
-    if (interviewers.indexOf(calendar) == -1) {
-      // answer += `${calendar} - Not allowed as an interviewer`
-    } else {
+    if (interviewers.indexOf(calendar) != -1) {
       answer += `${calendar} - OK\n`;
     }
   }
@@ -213,8 +211,8 @@ async function dispatchTest(event: any, callback: any) {
   console.log(`request received for userId=${event.userId}, intentName=${event.currentIntent.name}`);
 
   const payload = {
-    startDate: moment().format('YYYY-MM-DD'),
-    endDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+    startDate: moment().format(DATE_FORMAT),
+    endDate: moment().add(1, 'day').format(DATE_FORMAT),
   }
 
   const calendars = await availableCalendars(payload);
