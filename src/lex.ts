@@ -1,6 +1,6 @@
 import { Context, Callback } from 'aws-lambda';
 
-const genericLexHandler = (event: any, context: Context, callback: Callback, dispatcher: Function): void => {
+const genericLexHandler = (event: any, context: Context | null, callback: Callback, dispatcher: Function): void => {
   try {
     console.log(`request received for userId=${event.userId}, intentName=${event.currentIntent.name}`);
 

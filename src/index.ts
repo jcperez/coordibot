@@ -179,15 +179,15 @@ async function dispatchTest(event: any, callback: any) {
 }
 
 // --------------- Handlers -----------------------
-const retrieveAvailabilityHandler = (event: any, context: Context, callback: Callback) => {
+const retrieveAvailabilityHandler = (event: any, context: Context | null, callback: Callback) => {
   genericLexHandler(event, context, callback, dispatchAvailability);
 };
 
-const testRetrieveAvailabilityHandler = (event: any, context: Context, callback: Callback): void => {
+const testRetrieveAvailabilityHandler = (event: any, context: Context | null, callback: Callback): void => {
   genericLexHandler(event, context, callback, dispatchTest);
 };
 
-const retrieveStatistics = (event: any, context: Context, callback: Callback): void => {
+const retrieveStatistics = (event: any, context: Context | null, callback: Callback): void => {
   genericLexHandler(event, context, callback, dispatchStats);
 };
 
