@@ -10,7 +10,7 @@ import { detectEventConflict, today, nextDay } from './util/calendarUtils';
 import { isDurationAllowed } from './validations';
 import { DATE_FORMAT, WEEK_DATE_FORMAT } from './constants';
 import { availableCalendars, retrieveUserEvents, UserEvent } from './adapters/gcalendar';
-import { genericLexHandler, sendMessageToClient } from './lex';
+import { genericLambdaHandler, sendMessageToClient } from './lambda';
 
 const keywords: Array<string> = config.get('EVENT_NAME');
 
@@ -180,15 +180,15 @@ async function dispatchTest(event: any, callback: any) {
 
 // --------------- Handlers -----------------------
 const retrieveAvailabilityHandler = (event: any, context: Context | null, callback: Callback) => {
-  genericLexHandler(event, context, callback, dispatchAvailability);
+  genericLambdaHandler(event, context, callback, dispatchAvailability);
 };
 
 const testRetrieveAvailabilityHandler = (event: any, context: Context | null, callback: Callback): void => {
-  genericLexHandler(event, context, callback, dispatchTest);
+  genericLambdaHandler(event, context, callback, dispatchTest);
 };
 
 const retrieveStatistics = (event: any, context: Context | null, callback: Callback): void => {
-  genericLexHandler(event, context, callback, dispatchStats);
+  genericLambdaHandler(event, context, callback, dispatchStats);
 };
 
 export { retrieveAvailabilityHandler, testRetrieveAvailabilityHandler, retrieveStatistics }

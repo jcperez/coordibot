@@ -1,6 +1,6 @@
 import { Context, Callback } from 'aws-lambda';
 
-const genericLexHandler = (event: any, context: Context | null, callback: Callback, dispatcher: Function): void => {
+const genericLambdaHandler = (event: any, context: Context | null, callback: Callback, dispatcher: Function): void => {
   try {
     console.log(`request received for userId=${event.userId}, intentName=${event.currentIntent.name}`);
 
@@ -13,7 +13,7 @@ const genericLexHandler = (event: any, context: Context | null, callback: Callba
 };
 
 // Close dialog with the customer, reporting fulfillmentState of Failed or Fulfilled
-const closeLexDialog = (sessionAttributes: any, fulfillmentState: any, message: any) => {
+const closeLambdaDialog = (sessionAttributes: any, fulfillmentState: any, message: any) => {
   return {
     sessionAttributes,
     dialogAction: {
@@ -25,7 +25,7 @@ const closeLexDialog = (sessionAttributes: any, fulfillmentState: any, message: 
 };
 
 const sendMessageToClient = (message: string, sessionAttributes: any) => {
-  return closeLexDialog(
+  return closeLambdaDialog(
     sessionAttributes,
     'Fulfilled',
     {
@@ -35,4 +35,4 @@ const sendMessageToClient = (message: string, sessionAttributes: any) => {
   );
 };
 
-export { genericLexHandler, closeLexDialog, sendMessageToClient };
+export { genericLambdaHandler, sendMessageToClient };
