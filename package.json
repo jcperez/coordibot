@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "zip": "tsc && zip -r Lambda.zip .  -i \"*.js\" \"*.json\"",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "author": "Juan Carlos Pérez",
   "license": "ISC",

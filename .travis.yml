@@ -6,12 +6,10 @@ node_js:
 before_install:
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
+  - npm install codecov -g
 
 install:
   - npm install
-
-scripts:
-  - npm install codecov -g
 
 after_success:
   - codecov
