@@ -39,6 +39,8 @@ describe('Tests', () => {
     const today = moment().format('YYYY-MM-DD');
     const response: any = await availabilityTest(today);
     expect(response.dialogAction.message.content).toContain(`Availability for ${today}:`);
-    return expect(response.dialogAction.message.content).toContain("*00:00 to 00:00*");
+    expect(response.dialogAction.message.content).toContain("*14:00 to 15:00*");
+    expect(response.dialogAction.message.content).toContain("Event duration is less than 90 mins");
+    return expect(response.dialogAction.message.content).toContain("*10:00 to 12:00*");
   });
 });
