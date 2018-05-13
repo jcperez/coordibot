@@ -13,4 +13,5 @@ echo "###### Zip the package ######"
 zip -r Lambda.zip .  -i \"*.js\" \"*.json\"
 echo "###### Upload to S3 ######"
 ls -all
-aws
+aws lambda update-function-code --function-name RetrieveAvailability --zip-file ./Lambda.zip
+
