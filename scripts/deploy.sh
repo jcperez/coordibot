@@ -10,9 +10,9 @@ tsc
 echo "###### Removing dev dependencies ######"
 npm prune --production
 echo "###### Zip the package ######"
-zip -r Lambda.zip .  -i "*.js" "*.json"
-echo "###### Upload to S3 ######"
+zip -r Lambda.zip .  -i "*.js" "*.json" > /dev/null
+echo "###### List files ######"
 ls -all
-aws lambda list-functions
-# aws lambda update-function-code --function-name RetrieveAvailability --zip-file fileb://Lambda.zip
+echo "###### Deploy to lambda ######"
+aws lambda update-function-code --function-name RetrieveAvailability --zip-file fileb://Lambda.zip > /dev/null
 
