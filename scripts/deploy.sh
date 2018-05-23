@@ -15,4 +15,6 @@ echo "###### List files ######"
 ls -all
 echo "###### Deploy to lambda ######"
 aws lambda update-function-code --function-name RetrieveAvailability --zip-file fileb://Lambda.zip > /dev/null
+aws lambda update-function-code --function-name RetrieveStats --zip-file fileb://Lambda.zip > /dev/null
+aws lambda update-function-code --function-name TestConnection --zip-file fileb://Lambda.zip > /dev/null
 
