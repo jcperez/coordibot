@@ -3,13 +3,13 @@ import * as moment from 'moment';
 
 jest.mock('../adapters/gcalendar');
 
-describe('Tests', () => {
+describe('Handlers', () => {
   beforeAll(() => {
     console.error = () => {};
     console.log = () => {};
   });
 
-  test('Test retrieve availability', async () => {
+  test('Retrieve availability', async () => {
     const availabilityTest = (date:string) => {
       return new Promise((resolve) => {
         Coordibot.retrieveAvailabilityHandler({
@@ -36,15 +36,12 @@ describe('Tests', () => {
       });
     };
 
-    const today = moment().format('YYYY-MM-DD');
+    const today = moment(1527200000000).format('YYYY-MM-DD');
     const response: any = await availabilityTest(today);
-    expect(response.dialogAction.message.content).toContain(`Availability for ${today}:`);
-    expect(response.dialogAction.message.content).toContain("*14:00 to 15:00*");
-    expect(response.dialogAction.message.content).toContain("Event duration is less than 90 mins");
-    return expect(response.dialogAction.message.content).toContain("*10:00 to 12:00*");
+    return expect(response).toMatchSnapshot();
   });
 
-  test('Test connection checker', async () => {
+  test('Connection checker', async () => {
     const connectionTest = () => {
       return new Promise((resolve) => {
         Coordibot.testRetrieveAvailabilityHandler({
@@ -69,6 +66,6 @@ describe('Tests', () => {
     };
 
     const response: any = await connectionTest();
-    return expect(response.dialogAction.message.content).toContain("juan.carlos@wizeline.com - OK");
+    return expect(response).toMatchSnapshot();
   });
 });
