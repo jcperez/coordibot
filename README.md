@@ -36,7 +36,7 @@ $ tsc
 
 Setup the following environment variables
 
-| Environment variable  | Description   |
-|-----------------------|---------------|
-| INTERVIEWERS          |               |
-| GOOGLE_CONFIG         |               |
+| Environment variable  | Description                   |
+|-----------------------|-------------------------------|
+| INTERVIEWERS          | An array of strings           |
+| GOOGLE_CONFIG         |                               |
