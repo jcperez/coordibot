@@ -216,11 +216,16 @@ const displayTechnicalInformation = (event: any, context: Context | null, callba
 const mainHandler = (event: any, context: Context | null, callback: Callback): void => {
   const intentName = event.currentIntent.name;
 
-  console.log(`Intent name: ${intentName}`);
-
   switch (intentName) {
-    default:
+    case 'ScheduleInterview':
       return retrieveAvailabilityHandler(event, context, callback);
+    case 'AvailabilityStats':
+      return retrieveStatisticsHandler(event, context, callback);
+    case 'Help':
+      return displayHelpSectionHandler(event, context, callback);
+    default:
+      console.log('Default handler');
+      return displayHelpSectionHandler(event, context, callback);
   }
 };
 
