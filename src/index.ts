@@ -224,7 +224,7 @@ const mainHandler = (event: any, context: Context | null, callback: Callback): v
     case 'Help':
       return displayHelpSectionHandler(event, context, callback);
     default:
-      console.log('Default handler');
+      console.log(`Could not handle ${intentName}. Default handler invoked.`);
       return displayHelpSectionHandler(event, context, callback);
   }
 };
