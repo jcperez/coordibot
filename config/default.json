@@ -1,5 +1,6 @@
 {
   "EVENT_NAME": [
     "Hold for interview"
-  ]
+  ],
+  "BOT_SLACK_HANDLER": "@coordibot"
 }

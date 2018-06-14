@@ -178,6 +178,20 @@ async function dispatchTest(event: any, callback: any) {
   callback(sendMessageToClient(answer, sessionAttributes));
 }
 
+async function dispatchHelpSection(event: any, callback: any) {
+  const sessionAttributes = event.sessionAttributes;
+
+  const answer = `Hello! My name is ${config.get('BOT_SLACK_HANDLER')}`;
+
+  callback(sendMessageToClient(answer, sessionAttributes));
+}
+
+async function dispatchTechnicalInformation(event: any, callback: any) {
+  const sessionAttributes = event.sessionAttributes;
+  const answer = `BOT_SLACK_HANDLER: ${config.get('BOT_SLACK_HANDLER')}`;
+  callback(sendMessageToClient(answer, sessionAttributes));
+}
+
 // --------------- Handlers -----------------------
 const retrieveAvailabilityHandler = (event: any, context: Context | null, callback: Callback) => {
   genericLambdaHandler(event, context, callback, dispatchAvailability);
@@ -187,8 +201,34 @@ const testRetrieveAvailabilityHandler = (event: any, context: Context | null, ca
   genericLambdaHandler(event, context, callback, dispatchTest);
 };
 
-const retrieveStatistics = (event: any, context: Context | null, callback: Callback): void => {
+const retrieveStatisticsHandler = (event: any, context: Context | null, callback: Callback): void => {
   genericLambdaHandler(event, context, callback, dispatchStats);
 };
 
-export { retrieveAvailabilityHandler, testRetrieveAvailabilityHandler, retrieveStatistics }
+const displayHelpSectionHandler = (event: any, context: Context | null, callback: Callback): void => {
+  genericLambdaHandler(event, context, callback, dispatchHelpSection);
+};
+
+const displayTechnicalInformation = (event: any, context: Context | null, callback: Callback): void => {
+  genericLambdaHandler(event, context, callback, dispatchTechnicalInformation);
+};
+
+const mainHandler = (event: any, context: Context | null, callback: Callback): void => {
+  const intentName = event.currentIntent.name;
+
+  console.log(`Intent name: ${intentName}`);
+
+  switch (intentName) {
+    default:
+      return retrieveAvailabilityHandler(event, context, callback);
+  }
+};
+
+export {
+  retrieveAvailabilityHandler,
+  testRetrieveAvailabilityHandler,
+  retrieveStatisticsHandler,
+  displayHelpSectionHandler,
+  mainHandler,
+  displayTechnicalInformation,
+}

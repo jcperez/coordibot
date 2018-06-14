@@ -3,7 +3,6 @@ import { Context, Callback } from 'aws-lambda';
 const genericLambdaHandler = (event: any, context: Context | null, callback: Callback, dispatcher: Function): void => {
   try {
     console.log(`request received for userId=${event.userId}, intentName=${event.currentIntent.name}`);
-
     dispatcher(event, (response: any) => {
       callback(null, response);
     });
