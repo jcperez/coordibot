@@ -221,6 +221,8 @@ const mainHandler = (event: any, context: Context | null, callback: Callback): v
       return retrieveAvailabilityHandler(event, context, callback);
     case 'AvailabilityStats':
       return retrieveStatisticsHandler(event, context, callback);
+    case 'TestConnection':
+      return testRetrieveAvailabilityHandler(event, context, callback);
     case 'Help':
       return displayHelpSectionHandler(event, context, callback);
     default:
