@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Handlers Connection checker 1`] = `
+Object {
+  "dialogAction": Object {
+    "fulfillmentState": "Fulfilled",
+    "message": Object {
+      "content": "juan.carlos@wizeline.com - OK
+",
+      "contentType": "PlainText",
+    },
+    "type": "Close",
+  },
+  "sessionAttributes": Object {},
+}
+`;
+
+exports[`Handlers Retrieve availability 1`] = `
+Object {
+  "dialogAction": Object {
+    "fulfillmentState": "Fulfilled",
+    "message": Object {
+      "content": "Availability for 2018-05-25:
+*10:00 to 12:00* - juan.carlos@wizeline.com - Hold for interview
+
+*14:00 to 15:00* - juan.carlos@wizeline.com - Hold for interview
+ - Event duration is less than 90 mins
+
+",
+      "contentType": "PlainText",
+    },
+    "type": "Close",
+  },
+  "sessionAttributes": Object {},
+}
+`;
