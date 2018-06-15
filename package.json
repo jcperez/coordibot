@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc",
     "zip": "tsc && zip -r Lambda.zip .  -i \"*.js\" \"*.json\"",
-    "test": "jest --coverage",
-    "lint": "tslint -c tslint.json 'src/**/*.ts' -e \"**/__tests__/**\" -e \"**/__mocks__/**\" --fix"
+    "test": "npm run lint && jest --coverage",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' -e \"**/__tests__/**\" -e \"**/__mocks__/**\""
   },
   "author": "Juan Carlos Pérez",
   "license": "ISC",
