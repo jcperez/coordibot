@@ -1,52 +1,52 @@
-import * as Utils from '../utils';
-import * as moment from 'moment';
+import * as moment from "moment";
+import * as Utils from "../utils";
 
-import { UserEvent } from '../../adapters/gcalendar';
+import { IUserEvent } from "../../adapters/gcalendar";
 
-describe('Tests', () => {
+describe("Tests", () => {
   beforeAll(() => {
     console.error = () => {};
     console.log = () => {};
   });
 
-  test('Test sort string function', async () => {
-    let a: UserEvent = {
-      start: moment().format('YYYY-MM-DD'),
-      end: moment().format('YYYY-MM-DD'),
-      summary: 'Hold',
-      calendarId: 'juan.carlos@wizeline.com',
-      creator: 'juan.carlos@wizeline.com',
-      message: '10 to 15',
-      warnings: []
+  test("Test sort string function", async () => {
+    const a: IUserEvent = {
+      calendarId: "juan.carlos@wizeline.com",
+      creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
+      message: "10 to 15",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
+      warnings: [],
     };
 
-    let b: UserEvent = {
-      start: moment().format('YYYY-MM-DD'),
-      end: moment().format('YYYY-MM-DD'),
-      summary: 'Hold',
-      calendarId: 'juan.carlos@wizeline.com',
-      creator: 'juan.carlos@wizeline.com',
-      message: '12 to 17',
-      warnings: []
+    const b: IUserEvent = {
+      calendarId: "juan.carlos@wizeline.com",
+      creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
+      message: "12 to 17",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
+      warnings: [],
     };
 
-    let c: UserEvent = {
-      start: moment().format('YYYY-MM-DD'),
-      end: moment().format('YYYY-MM-DD'),
-      summary: 'Hold',
-      calendarId: 'juan.carlos@wizeline.com',
-      creator: 'juan.carlos@wizeline.com',
-      message: '10 to 15',
-      warnings: []
+    const c: IUserEvent = {
+      calendarId: "juan.carlos@wizeline.com",
+      creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
+      message: "10 to 15",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
+      warnings: [],
     };
 
-    let d: UserEvent = {
-      start: moment().format('YYYY-MM-DD'),
-      end: moment().format('YYYY-MM-DD'),
-      summary: 'Hold',
-      calendarId: 'juan.carlos@wizeline.com',
-      creator: 'juan.carlos@wizeline.com',
-      warnings: []
+    const d: IUserEvent = {
+      calendarId: "juan.carlos@wizeline.com",
+      creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
+      warnings: [],
     };
 
     expect(Utils.sortStrings(a, b)).toBe(-1);

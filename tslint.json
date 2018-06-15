@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-console": {
+      "severity": "off"
+    },
+    "forin": {
+      "severity": "off"
+    }
+  },
+  "rulesDirectory": []
+}

@@ -1,8 +1,8 @@
-import * as moment from 'moment';
+import * as moment from "moment";
 
-import { UserEvent } from './adapters/gcalendar';
+import { IUserEvent } from "./adapters/gcalendar";
 
-const isDurationAllowed = (event: UserEvent, minimumDuration: Number = 90): boolean => {
+const isDurationAllowed = (event: IUserEvent, minimumDuration: number = 90): boolean => {
   const start = moment(event.start);
   const end = moment(event.end);
 
@@ -11,5 +11,5 @@ const isDurationAllowed = (event: UserEvent, minimumDuration: Number = 90): bool
 };
 
 export {
-  isDurationAllowed
-}
+  isDurationAllowed,
+};

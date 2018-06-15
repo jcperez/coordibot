@@ -12,8 +12,8 @@
 //   "auth_provider_x509_cert_url",
 //   "client_x509_cert_url"
 // }
-import * as config from 'config';
+import * as config from "config";
 
-const privateKey = JSON.parse(config.get('GOOGLE_CONFIG') || '{}');
+const privateKey = JSON.parse(config.get("GOOGLE_CONFIG") || "{}");
 
 export { privateKey };
