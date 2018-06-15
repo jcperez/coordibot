@@ -1,4 +1,4 @@
-import { Context, Callback } from 'aws-lambda';
+import { Callback, Context } from "aws-lambda";
 
 const genericLambdaHandler = (event: any, context: Context | null, callback: Callback, dispatcher: Function): void => {
   try {
@@ -16,7 +16,7 @@ const closeLambdaDialog = (sessionAttributes: any, fulfillmentState: any, messag
   return {
     sessionAttributes,
     dialogAction: {
-      type: 'Close',
+      type: "Close",
       fulfillmentState,
       message,
     },
@@ -26,11 +26,11 @@ const closeLambdaDialog = (sessionAttributes: any, fulfillmentState: any, messag
 const sendMessageToClient = (message: string, sessionAttributes: any) => {
   return closeLambdaDialog(
     sessionAttributes,
-    'Fulfilled',
+    "Fulfilled",
     {
-      'contentType': 'PlainText',
-      'content': message
-    }
+      contentType: "PlainText",
+      content: message,
+    },
   );
 };
 

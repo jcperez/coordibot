@@ -1,5 +1,5 @@
-import * as config from 'config';
+import * as config from "config";
 
-const interviewers: Array<string> = JSON.parse(config.get('INTERVIEWERS'));
+const interviewers: string[] = JSON.parse(config.get("INTERVIEWERS"));
 
 export { interviewers };

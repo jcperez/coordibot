@@ -1,64 +1,63 @@
-import * as _ from 'lodash';
-import * as moment from 'moment';
-import * as config from 'config';
+import * as config from "config";
+import * as _ from "lodash";
+import * as moment from "moment";
 
-import { Context, Callback } from 'aws-lambda';
+import { Callback, Context } from "aws-lambda";
 
-import { interviewers } from './interviewers';
-import { eventMatching, sortStrings } from './util/utils';
-import { detectEventConflict, today, nextDay } from './util/calendarUtils';
-import { isDurationAllowed } from './validations';
-import { DATE_FORMAT, WEEK_DATE_FORMAT } from './constants';
-import { availableCalendars, retrieveUserEvents, UserEvent } from './adapters/gcalendar';
-import { genericLambdaHandler, sendMessageToClient } from './lambda';
+import { availableCalendars, retrieveUserEvents, UserEvent } from "./adapters/gcalendar";
+import { DATE_FORMAT, WEEK_DATE_FORMAT } from "./constants";
+import { interviewers } from "./interviewers";
+import { genericLambdaHandler, sendMessageToClient } from "./lambda";
+import { detectEventConflict, nextDay, today } from "./util/calendarUtils";
+import { eventMatching, sortStrings } from "./util/utils";
+import { isDurationAllowed } from "./validations";
 
-const keywords: Array<string> = config.get('EVENT_NAME');
+const keywords: string[] = config.get("EVENT_NAME");
 
-const formatTestResponse = (calendars: Array<any>): string => {
-  const calendarIds = calendars.map(calendar => calendar.id);
-  let answer = '';
-  for (let calendar of calendarIds) {
+const formatTestResponse = (calendars: any[]): string => {
+  const calendarIds = calendars.map((calendar) => calendar.id);
+  let answer = "";
+  for (const calendar of calendarIds) {
     if (interviewers.indexOf(calendar) != -1) {
       answer += `${calendar} - OK\n`;
     }
   }
-  for (let interviewer of interviewers) {
+  for (const interviewer of interviewers) {
     if (calendarIds.indexOf(interviewer) == -1) {
-      answer += `${interviewer} - Waiting for access to calendar\n`
+      answer += `${interviewer} - Waiting for access to calendar\n`;
     }
   }
   return answer;
 };
 
-const interviewersAvailability = async (startDate : string, endDate?: string) => {
+const interviewersAvailability = async (startDate: string, endDate?: string) => {
   const payload = {
-    startDate: startDate,
-    endDate: endDate || nextDay(startDate)
-  }
+    startDate,
+    endDate: endDate || nextDay(startDate),
+  };
 
   console.log(`Retrieving availability: ${payload.startDate} to ${payload.endDate}`);
 
   const calendars = await availableCalendars(payload);
-  const calendarIds: Array<string> = calendars.map((calendar: any) => calendar.id);
+  const calendarIds: string[] = calendars.map((calendar: any) => calendar.id);
 
-  let availability = {};
+  const availability = {};
 
-  let interviewersSlots: Array<UserEvent>[] = await Promise.all(interviewers.map(interviewer => {
+  const interviewersSlots: UserEvent[][] = await Promise.all(interviewers.map((interviewer) => {
     if (calendarIds.indexOf(interviewer) > -1) {
       return retrieveUserEvents(interviewer, payload)
-        .catch(err => []);
+        .catch((err) => []);
     }
     console.log(`Skipping ${interviewer}. Service doesn't have access to this calendar.`);
     return Promise.resolve([]);
   }));
 
-
-  for (let allSlots of interviewersSlots) {
-    let slots: Array<UserEvent> = [];
+  for (const allSlots of interviewersSlots) {
+    let slots: UserEvent[] = [];
     slots = allSlots.filter((event: UserEvent) => eventMatching(keywords, event.summary));
-    slots = slots.filter(slot => slot.creator === slot.calendarId);
+    slots = slots.filter((slot) => slot.creator === slot.calendarId);
 
-    for (let slot of slots) {
+    for (const slot of slots) {
       const date = moment(slot.start);
       const end = moment(slot.end);
       const day = date.format(DATE_FORMAT);
@@ -69,7 +68,7 @@ const interviewersAvailability = async (startDate : string, endDate?: string) =>
 
       // Add warnings to the slots
       if (!isDurationAllowed(slot)) {
-        slot.warnings.push('Event duration is less than 90 mins');
+        slot.warnings.push("Event duration is less than 90 mins");
       }
 
       const conflictEvents = detectEventConflict(slot, allSlots);
@@ -81,20 +80,20 @@ const interviewersAvailability = async (startDate : string, endDate?: string) =>
         slot.warnings.push(conflictMessage);
       }
 
-      slot.message = `*${date.format('HH:mm')} to ${end.format('HH:mm')}* - ${slot.calendarId} - ${slot.summary}`;
+      slot.message = `*${date.format("HH:mm")} to ${end.format("HH:mm")}* - ${slot.calendarId} - ${slot.summary}`;
 
       if (slot.warnings.length) {
-        for (let warning of slot.warnings) {
+        for (const warning of slot.warnings) {
           slot.message += `\n - ${warning}`;
         }
       }
-      slot.message += '\n';
+      slot.message += "\n";
       availability[day].push(slot);
     }
   }
 
   const keys = _.keys(availability);
-  for (let day in keys) {
+  for (const day in keys) {
     availability[keys[day]].sort(sortStrings);
   }
 
@@ -109,13 +108,13 @@ async function dispatchAvailability(intentRequest: any, callback: any) {
 
   const availability = await interviewersAvailability(interviewDate);
 
-  let answer = '';
+  let answer = "";
 
   const keys = _.keys(availability);
-  for (let day in keys) {
+  for (const day in keys) {
     const k = keys[day];
     answer += `Availability for ${k}:\n`;
-    for (let slot of availability[k]) {
+    for (const slot of availability[k]) {
       answer += `${slot.message}\n`;
     }
   }
@@ -135,30 +134,30 @@ async function dispatchStats(intentRequest: any, callback: any) {
 
   // Validate string to be a ISO 8601 week date
   const week = moment(date, WEEK_DATE_FORMAT, true);
-  let answer = '';
+  let answer = "";
 
   if (!week.isValid()) {
-    answer = 'I cannot process your request. Say something like `stats this week` or `stats next week`';
+    answer = "I cannot process your request. Say something like `stats this week` or `stats next week`";
   } else {
     const startWeek = moment(date);
-    const endWeek = moment(date).add(5, 'days');
+    const endWeek = moment(date).add(5, "days");
 
     const availability = await interviewersAvailability(startWeek.format(DATE_FORMAT), endWeek.format(DATE_FORMAT));
 
     const keys = _.keys(availability);
     let minutes = 0;
-    let messages: Array<string> = [];
-    for (let day in keys) {
+    const messages: string[] = [];
+    for (const day in keys) {
       const k = keys[day];
       let dayAvailability = 0;
-      for (let slot of availability[k]) {
+      for (const slot of availability[k]) {
         dayAvailability += moment.duration(moment(slot.end).diff(moment(slot.start))).asMinutes();
       }
       minutes += dayAvailability;
-      messages.push(`${k}: ${Number(dayAvailability/60).toFixed(2)} hours`);
+      messages.push(`${k}: ${Number(dayAvailability / 60).toFixed(2)} hours`);
     }
 
-    answer += `${messages.sort().join('\n')}\n---------------------\nYou have ${Number(minutes/60).toFixed(2)} hours available between ${startWeek.format('MMM D')} and ${endWeek.add(-1, 'days').format('MMM D')}.`;
+    answer += `${messages.sort().join("\n")}\n---------------------\nYou have ${Number(minutes / 60).toFixed(2)} hours available between ${startWeek.format("MMM D")} and ${endWeek.add(-1, "days").format("MMM D")}.`;
   }
 
   callback(sendMessageToClient(answer, sessionAttributes));
@@ -170,7 +169,7 @@ async function dispatchTest(event: any, callback: any) {
   const payload = {
     startDate: today(),
     endDate: nextDay(),
-  }
+  };
 
   const calendars = await availableCalendars(payload);
   const answer = formatTestResponse(calendars);
@@ -181,14 +180,14 @@ async function dispatchTest(event: any, callback: any) {
 async function dispatchHelpSection(event: any, callback: any) {
   const sessionAttributes = event.sessionAttributes;
 
-  const answer = `Hello! My name is ${config.get('BOT_SLACK_HANDLER')}`;
+  const answer = `Hello! My name is ${config.get("BOT_SLACK_HANDLER")}`;
 
   callback(sendMessageToClient(answer, sessionAttributes));
 }
 
 async function dispatchTechnicalInformation(event: any, callback: any) {
   const sessionAttributes = event.sessionAttributes;
-  const answer = `BOT_SLACK_HANDLER: ${config.get('BOT_SLACK_HANDLER')}`;
+  const answer = `BOT_SLACK_HANDLER: ${config.get("BOT_SLACK_HANDLER")}`;
   callback(sendMessageToClient(answer, sessionAttributes));
 }
 
@@ -217,13 +216,13 @@ const mainHandler = (event: any, context: Context | null, callback: Callback): v
   const intentName = event.currentIntent.name;
 
   switch (intentName) {
-    case 'ScheduleInterview':
+    case "ScheduleInterview":
       return retrieveAvailabilityHandler(event, context, callback);
-    case 'AvailabilityStats':
+    case "AvailabilityStats":
       return retrieveStatisticsHandler(event, context, callback);
-    case 'TestConnection':
+    case "TestConnection":
       return testRetrieveAvailabilityHandler(event, context, callback);
-    case 'Help':
+    case "Help":
       return displayHelpSectionHandler(event, context, callback);
     default:
       console.log(`Could not handle ${intentName}. Default handler invoked.`);
@@ -238,4 +237,4 @@ export {
   displayHelpSectionHandler,
   mainHandler,
   displayTechnicalInformation,
-}
+};

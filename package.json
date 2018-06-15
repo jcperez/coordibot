@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "zip": "tsc && zip -r Lambda.zip .  -i \"*.js\" \"*.json\"",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' --fix"
   },
   "author": "Juan Carlos Pérez",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "jest": "^22.4.3",
     "serverless-offline": "^3.20.1",
     "serverless-plugin-typescript": "^1.1.5",
-    "ts-jest": "^22.4.4"
+    "ts-jest": "^22.4.4",
+    "tslint": "^5.10.0"
   }
 }
