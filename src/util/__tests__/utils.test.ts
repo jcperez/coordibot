@@ -1,7 +1,7 @@
 import * as moment from "moment";
 import * as Utils from "../utils";
 
-import { UserEvent } from "../../adapters/gcalendar";
+import { IUserEvent } from "../../adapters/gcalendar";
 
 describe("Tests", () => {
   beforeAll(() => {
@@ -10,42 +10,42 @@ describe("Tests", () => {
   });
 
   test("Test sort string function", async () => {
-    const a: UserEvent = {
-      start: moment().format("YYYY-MM-DD"),
-      end: moment().format("YYYY-MM-DD"),
-      summary: "Hold",
+    const a: IUserEvent = {
       calendarId: "juan.carlos@wizeline.com",
       creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
       message: "10 to 15",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
       warnings: [],
     };
 
-    const b: UserEvent = {
-      start: moment().format("YYYY-MM-DD"),
-      end: moment().format("YYYY-MM-DD"),
-      summary: "Hold",
+    const b: IUserEvent = {
       calendarId: "juan.carlos@wizeline.com",
       creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
       message: "12 to 17",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
       warnings: [],
     };
 
-    const c: UserEvent = {
-      start: moment().format("YYYY-MM-DD"),
-      end: moment().format("YYYY-MM-DD"),
-      summary: "Hold",
+    const c: IUserEvent = {
       calendarId: "juan.carlos@wizeline.com",
       creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
       message: "10 to 15",
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
       warnings: [],
     };
 
-    const d: UserEvent = {
-      start: moment().format("YYYY-MM-DD"),
-      end: moment().format("YYYY-MM-DD"),
-      summary: "Hold",
+    const d: IUserEvent = {
       calendarId: "juan.carlos@wizeline.com",
       creator: "juan.carlos@wizeline.com",
+      end: moment().format("YYYY-MM-DD"),
+      start: moment().format("YYYY-MM-DD"),
+      summary: "Hold",
       warnings: [],
     };
 

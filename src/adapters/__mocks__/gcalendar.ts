@@ -1,6 +1,4 @@
-import * as moment from "moment";
-
-interface UserEvent {
+interface IUserEvent {
   start: string;
   end: string;
   summary: string;
@@ -10,13 +8,13 @@ interface UserEvent {
   creator: string;
 }
 
-interface RetrieveEventsOptions {
+interface IRetrieveEventsOptions {
   startDate: string;
   endDate: string;
   query?: string;
 }
 
-const retrieveUserEvents = async (user: string, options: RetrieveEventsOptions): Promise<UserEvent[]> => {
+const retrieveUserEvents = async (user: string, options: IRetrieveEventsOptions): Promise<IUserEvent[]> => {
   return Promise.resolve([
     {
       start: `2018-05-25T14:00:00-05:00`,

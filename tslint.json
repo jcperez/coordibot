@@ -3,6 +3,13 @@
     "tslint:recommended"
   ],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "no-console": {
+      "severity": "off"
+    },
+    "forin": {
+      "severity": "off"
+    }
+  },
   "rulesDirectory": []
 }

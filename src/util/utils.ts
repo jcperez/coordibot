@@ -1,4 +1,4 @@
-import { UserEvent } from "../adapters/gcalendar";
+import { IUserEvent } from "../adapters/gcalendar";
 
 import * as _ from "lodash";
 
@@ -12,7 +12,7 @@ const eventMatching = (keywords: string[], summary: string) => {
   });
 };
 
-const sortStrings = (a: UserEvent, b: UserEvent): number => {
+const sortStrings = (a: IUserEvent, b: IUserEvent): number => {
   if (a.message && b.message) {
     return a.message.localeCompare(b.message);
   }

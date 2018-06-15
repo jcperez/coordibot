@@ -1,12 +1,12 @@
 import * as moment from "moment";
 
-import { UserEvent } from "../adapters/gcalendar";
+import { IUserEvent } from "../adapters/gcalendar";
 import { DATE_FORMAT } from "../constants";
 
-const detectEventConflict = (event: UserEvent, events: UserEvent[]): UserEvent[] => {
+const detectEventConflict = (event: IUserEvent, events: IUserEvent[]): IUserEvent[] => {
   const start = moment(event.start);
   const end = moment(event.end);
-  events.filter;
+
   return events.filter((conflictingEvent) => {
     if (conflictingEvent.summary === event.summary) {
       return false;
