@@ -1,9 +1,9 @@
 const test = require('./dist/index');
 
-test.retrieveAvailabilityHandler({
+test.displayHelpSectionHandler({
   "messageVersion": "1.0",
   "invocationSource": "FulfillmentCodeHook",
-  "userId": "user-1",
+  "userId": "abebdb16-4a77-4a89-b5c1-a9d9af667e36:T024QJSEN:U7MS9HXNU",
   "sessionAttributes": {},
   "bot": {
     "name": "CoordinatorBot",

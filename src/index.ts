@@ -8,6 +8,7 @@ import { availableCalendars, IUserEvent, retrieveUserEvents } from "./adapters/g
 import { DATE_FORMAT, WEEK_DATE_FORMAT } from "./constants";
 import { interviewers } from "./interviewers";
 import { genericLambdaHandler, sendMessageToClient } from "./lambda";
+import { retrieveUserInformation } from "./users";
 import { detectEventConflict, nextDay, today } from "./util/calendarUtils";
 import { eventMatching, sortStrings } from "./util/utils";
 import { isDurationAllowed } from "./validations";
@@ -181,7 +182,12 @@ async function dispatchTest(event: any, callback: any) {
 async function dispatchHelpSection(event: any, callback: any) {
   const sessionAttributes = event.sessionAttributes;
 
-  const answer = `Hello! My name is ${config.get("BOT_SLACK_HANDLER")}`;
+  const user = await retrieveUserInformation(event.userId);
+
+  const answer = `Hello ${user.real_name}! My name is ${config.get("BOT_SLACK_HANDLER")}.
+  To retrieve available spots for interviews, just send me a message saying \`check\` and the date.
+  For example: \`check tomorrow\`, \`check next Monday\`, or \`check June 20\`
+  `;
 
   callback(sendMessageToClient(answer, sessionAttributes));
 }
