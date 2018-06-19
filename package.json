@@ -16,7 +16,8 @@
     "googleapis": "^27.0.0",
     "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
-    "moment": "^2.22.0"
+    "moment": "^2.22.0",
+    "request": "^2.87.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "0.0.35",
@@ -25,6 +26,7 @@
     "@types/jest": "^22.2.3",
     "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.2",
+    "@types/request": "^2.47.1",
     "jest": "^22.4.3",
     "serverless-offline": "^3.20.1",
     "serverless-plugin-typescript": "^1.1.5",
