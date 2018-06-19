@@ -183,8 +183,12 @@ async function dispatchHelpSection(event: any, callback: any) {
   const sessionAttributes = event.sessionAttributes;
 
   const user = await retrieveUserInformation(event.userId);
+  const userName = user.profile.real_name_normalized.split(" ")[0];
 
-  const answer = `Hello ${user.real_name}! My name is ${config.get("BOT_SLACK_HANDLER")}.
+  const answer = `Hello ${userName}!
+
+  My name is ${config.get("BOT_SLACK_HANDLER")}.
+
   To retrieve available spots for interviews, just send me a message saying \`check\` and the date.
   For example: \`check tomorrow\`, \`check next Monday\`, or \`check June 20\`
   `;
