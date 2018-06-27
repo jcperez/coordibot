@@ -114,7 +114,7 @@ async function dispatchAvailability(intentRequest: any, callback: any) {
   const keys = _.keys(availability);
   for (const day in keys) {
     const k = keys[day];
-    answer += `Availability for ${k}:\n`;
+    answer += `Availability for ${moment(k).format("dddd ll")}:\n`;
     for (const slot of availability[k]) {
       answer += `${slot.message}\n`;
     }
