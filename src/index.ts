@@ -31,6 +31,20 @@ const formatTestResponse = (calendars: any[]): string => {
   return answer;
 };
 
+const capitalizeFirstLetter = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const getName = (calendarId: string) => {
+  try {
+    const username = calendarId.split("@")[0];
+    return username.split("\.").map(capitalizeFirstLetter).join(" ");
+  } catch (ex) {
+    console.log(ex);
+    return calendarId;
+  }
+};
+
 const interviewersAvailability = async (startDate: string, endDate?: string) => {
   const payload = {
     endDate: endDate || nextDay(startDate),
@@ -81,7 +95,7 @@ const interviewersAvailability = async (startDate: string, endDate?: string) => 
         slot.warnings.push(conflictMessage);
       }
 
-      slot.message = `*${date.format("HH:mm")} to ${end.format("HH:mm")}* - ${slot.calendarId} - ${slot.summary}`;
+      slot.message = `*${date.format("HH:mm")} to ${end.format("HH:mm")}* - ${getName(slot.calendarId)}`;
 
       if (slot.warnings.length) {
         for (const warning of slot.warnings) {
