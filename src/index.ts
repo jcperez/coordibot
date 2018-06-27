@@ -90,7 +90,7 @@ const interviewersAvailability = async (startDate: string, endDate?: string) => 
       if (conflictEvents.length > 0) {
         let conflictMessage = `Slot has a conflict with \`${conflictEvents[0].summary}\``;
         if (conflictEvents.length > 1) {
-          conflictMessage += ` and ${conflictEvents.length - 1} other event(s).`;
+          conflictMessage += ` and ${conflictEvents.length - 1} other event ${conflictEvents.length > 1 ? "(s)" : ""}.`;
         }
         slot.warnings.push(conflictMessage);
       }
