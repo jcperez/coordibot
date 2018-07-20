@@ -36,7 +36,9 @@ $ tsc
 
 Setup the following environment variables
 
-| Environment variable  | Description                   |
-|-----------------------|-------------------------------|
-| INTERVIEWERS          | An array of strings           |
-| GOOGLE_CONFIG         |                               |
+| Environment variable  | Description                                         | Default       |
+|-----------------------|-----------------------------------------------------|---------------|
+| INTERVIEWERS          | An array of strings                                 |               |
+| GOOGLE_CONFIG         |                                                     |               |
+| EVENT_NAME            | The event name that the application is looking for  |               |
+| BOT_SLACK_HANDLER     | Slack handler of the bot                            | `@coordibot`  |
