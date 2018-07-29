@@ -3,11 +3,11 @@ import * as _ from "lodash";
 import * as moment from "moment";
 
 import { availableCalendars } from "../adapters/gcalendar";
+import { retrieveUserInformation } from "../adapters/users";
 import { DATE_FORMAT, WEEK_DATE_FORMAT } from "../constants";
 import { interviewers } from "../interviewers";
 import { sendMessageToClient } from "../lambda";
 import { interviewersAvailability } from "../services/retrieveAvailability";
-import { retrieveUserInformation } from "../users";
 import { nextDay, today } from "../util/calendarUtils";
 
 const formatTestResponse = (calendars: any[]): string => {

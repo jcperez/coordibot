@@ -42,3 +42,4 @@ Setup the following environment variables
 | GOOGLE_CONFIG         |                                                     |               |
 | EVENT_NAME            | The event name that the application is looking for  |               |
 | BOT_SLACK_HANDLER     | Slack handler of the bot                            | `@coordibot`  |
+| SLACK_TOKEN           | Workplace's Slack token                             |               |
