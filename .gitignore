@@ -9,3 +9,6 @@ config/local.json
 # Serverless directories
 .serverless
 dist
+
+# VS Code
+.vscode

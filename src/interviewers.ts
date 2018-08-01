@@ -1,5 +1,7 @@
 import * as config from "config";
 
-const interviewers: string[] = JSON.parse(config.get("INTERVIEWERS"));
+const interviewers: string[] = config.has("INTERVIEWERS") ?
+  JSON.parse(config.get("INTERVIEWERS")) :
+  [""];
 
 export { interviewers };
