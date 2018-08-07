@@ -3,6 +3,8 @@ echo "###### Starting Deployment ######"
 ls -all
 echo "###### Installing modules ######"
 npm install
+echo "###### Running security audit ######"
+npm audit
 echo "###### Installing Typescript ######"
 npm install -g typescript
 echo "###### Compiling Typescript ######"
