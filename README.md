@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/jcperez/coordibot.svg?branch=master)](https://travis-ci.org/jcperez/coordibot)
 [![codecov](https://codecov.io/gh/jcperez/coordibot/branch/master/graph/badge.svg)](https://codecov.io/gh/jcperez/coordibot)
 
-Coordibot is a AWS Lex based conversational bot written in Typescript that uses AWS Lambda functions to provide Google Calendar information back to callers.
+Coordibot is a AWS Lex based conversational bot written in Typescript that uses AWS Lambda functions to provide Google Calendar information.
 
 ## Application Overview
 
 ![Overview](./img/Coordibot.png)
 
-The application is an AWS Lex based bot, that interacts with a AWS Lambda functions.
+The application is an AWS Lex based bot, that interacts with a AWS Lambda function.
 
 ## Setup
 
