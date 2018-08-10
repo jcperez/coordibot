@@ -31,6 +31,7 @@
     "serverless-offline": "^3.25.7",
     "serverless-plugin-typescript": "^1.1.5",
     "ts-jest": "^22.4.4",
-    "tslint": "^5.10.0"
+    "tslint": "^5.10.0",
+    "typescript": "^3.0.1"
   }
 }

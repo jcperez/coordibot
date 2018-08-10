@@ -6,7 +6,7 @@ npm install
 echo "###### Running security audit ######"
 npm audit
 echo "###### Installing Typescript ######"
-npm install -g typescript
+npm run build
 echo "###### Compiling Typescript ######"
 tsc
 echo "###### Removing dev dependencies ######"
