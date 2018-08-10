@@ -7,7 +7,7 @@ Coordibot is a AWS Lex based conversational bot written in Typescript that uses 
 
 ## Application Overview
 
-![Overview](./img/overview.png)
+![Overview](./img/Coordibot.png)
 
 The application is an AWS Lex based bot, that interacts with a AWS Lambda functions.
 
