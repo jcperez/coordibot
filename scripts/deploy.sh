@@ -5,10 +5,8 @@ echo "###### Installing modules ######"
 npm install
 echo "###### Running security audit ######"
 npm audit
-echo "###### Installing Typescript ######"
-npm run build
 echo "###### Compiling Typescript ######"
-tsc
+npm run build
 echo "###### Removing dev dependencies ######"
 npm prune --production
 echo "###### Zip the package ######"
