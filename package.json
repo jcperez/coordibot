@@ -28,7 +28,7 @@
     "@types/node": "^9.6.2",
     "@types/request": "^2.47.1",
     "jest": "^22.4.3",
-    "serverless-offline": "^3.25.7",
+    "serverless-offline": "^12.0.3",
     "serverless-plugin-typescript": "^1.1.5",
     "ts-jest": "^22.4.4",
     "tslint": "^5.10.0",
